@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kapitel 1 · Übungen online · Graf von Anderson's College German</title>
+<style>
+  :root {
+    --desk: #ECEAE4;
+    --paper: #FFFFFF;
+    --ink: #1A1A1A;
+    --muted: #6B6760;
+    --rule: #D7D3CA;
+    --pen: #C0281E;
+    --pen-soft: #F8E8E6;
+    --serif: "Times New Roman", Times, "Nimbus Roman", Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--desk); }
+  body {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 660px;
+    margin: 28px auto 60px;
+    background: var(--paper);
+    padding: 40px 56px 56px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 8px 30px rgba(0,0,0,.06);
+  }
+  @media (max-width: 720px) {
+    .page { margin: 0; padding: 24px 20px 48px; box-shadow: none; }
+    body { font-size: 16px; }
+  }
+
+  /* running head, as in the book */
+  .running-head {
+    display: flex; justify-content: space-between; gap: 12px;
+    font-style: italic; font-size: 15px; color: var(--ink);
+    border-bottom: 1px solid var(--rule); padding-bottom: 8px; margin-bottom: 34px;
+  }
+  .running-head b { font-style: normal; font-weight: 700; }
+
+  h1 {
+    font-size: 30px; font-weight: 700; line-height: 1.15; margin: 0 0 6px;
+  }
+  h1 .num { font-weight: 400; margin-right: .5em; }
+  .lede { margin: 0 0 28px; }
+
+  /* exercise tabs: A–D are in the book; E–G continue online */
+  .tabs { display: flex; gap: 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); margin-bottom: 26px; }
+  .tab {
+    flex: 1; background: none; border: 0; border-right: 1px solid var(--rule);
+    font: inherit; text-align: left; padding: 10px 12px 9px; cursor: pointer; color: var(--muted);
+    display: flex; gap: 10px; align-items: baseline;
+  }
+  .tab:last-child { border-right: 0; }
+  .tab b { font-size: 20px; color: var(--ink); }
+  .tab[aria-selected="true"] { color: var(--ink); box-shadow: inset 0 -3px 0 var(--pen); }
+  .tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--pen); outline-offset: 2px;
+  }
+  @media (max-width: 520px) {
+    .tab { flex-direction: column; gap: 0; padding: 8px; }
+    .tab span { font-size: 14px; }
+  }
+
+  h2 { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
+  .rubric { color: var(--muted); margin: 0 0 22px; font-size: 16px; }
+  .rubric i { color: var(--ink); }
+
+  /* the sentence being worked on */
+  .item {
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 22px 0 20px; margin: 0 0 18px;
+  }
+  .prompt { font-size: 24px; margin: 0 0 14px; }
+  .prompt .arrow { color: var(--muted); margin: 0 .35em; }
+  .prompt .blank {
+    display: inline-block; min-width: 3.2em; border-bottom: 1.5px solid var(--ink);
+    vertical-align: baseline; line-height: 1; margin-right: .3em;
+  }
+  .answer-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  input[type="text"] {
+    font: inherit; font-size: 22px; padding: 6px 10px; width: 8em;
+    border: 1px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink);
+  }
+  button.act, button.choice {
+    font: inherit; font-size: 15px; font-variant: small-caps; letter-spacing: .06em;
+    padding: 8px 16px; background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink); border-radius: 0; cursor: pointer;
+  }
+  button.act.quiet { background: none; color: var(--ink); }
+  button.act[disabled] { opacity: .4; cursor: default; }
+  button.choice {
+    font-variant: normal; letter-spacing: 0; font-size: 20px; background: none; color: var(--ink);
+    padding: 8px 20px; min-width: 4.2em;
+  }
+  button.choice:hover { background: var(--pen-soft); }
+  button.choice[data-state="right"] { background: var(--ink); color: var(--paper); }
+  button.choice[data-state="wrong"] { color: var(--pen); text-decoration: line-through; border-color: var(--pen); }
+  .choices { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .choices .lbl { flex-basis: 100%; color: var(--muted); font-size: 15px; }
+
+  /* the red pen */
+  .mark { min-height: 2.2em; margin-top: 14px; font-size: 18px; }
+  .stamp {
+    display: inline-block; margin-right: 10px; color: var(--pen); font-style: italic; font-weight: 700; font-size: 26px;
+    transform: rotate(-3deg); transform-origin: left bottom;
+    animation: stamp .18s ease-out;
+  }
+  .stamp.wrong { transform: rotate(1.5deg); }
+  @keyframes stamp { from { transform: scale(1.35) rotate(-3deg); opacity: 0; } to { transform: scale(1) rotate(-3deg); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .stamp { animation: none; } }
+  .correction { color: var(--pen); }
+  .correction s { text-decoration: line-through; text-decoration-color: var(--pen); }
+  .correction .caret { font-size: 13px; vertical-align: sub; margin: 0 2px; }
+  .note { color: var(--muted); font-size: 16px; margin-top: 6px; }
+  .note i { color: var(--ink); }
+
+  .score-line { display: flex; justify-content: space-between; align-items: baseline; color: var(--muted); font-size: 15px; }
+  .score-line b { color: var(--ink); font-size: 17px; }
+
+  .card {
+    display: inline-block; border: 1px solid var(--ink); padding: 10px 18px 8px; margin: 0 0 14px;
+    font-size: 15px; color: var(--muted);
+  }
+  .card b { display: block; font-size: 26px; color: var(--ink); font-weight: 400; line-height: 1.1; margin-top: 2px; }
+  .situation { font-size: 22px; margin: 0 0 16px; }
+
+  /* exercise G builder */
+  .modes { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .line { display: grid; grid-template-columns: 2.2em 1fr auto 1fr auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .line .n { color: var(--muted); font-size: 15px; }
+  select {
+    font: inherit; font-size: 17px; padding: 6px 8px; border: 1px solid var(--ink); border-radius: 0;
+    background: var(--paper); color: var(--ink); max-width: 100%;
+  }
+  .line .ist { color: var(--muted); }
+  .line button.x { background: none; border: 0; color: var(--muted); font: inherit; font-size: 20px; cursor: pointer; padding: 0 6px; }
+  @media (max-width: 520px) {
+    .line { grid-template-columns: 2.2em 1fr auto; }
+    .line select.adj, .line .ist { grid-column: 2 / span 2; }
+  }
+  .scene { margin: 0 0 12px; padding-left: 0; list-style: none; font-size: 21px; }
+  .scene li { margin: 0 0 6px; }
+  .scene li .guess { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .scene li .verdict { font-size: 16px; }
+  .scene li .verdict.g { color: var(--muted); }
+  .scene li .verdict.exact { color: var(--pen); font-style: italic; }
+  .scene li .verdict.no { color: var(--pen); }
+  .stack { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+  .summary { border: 1px solid var(--ink); padding: 18px 20px; margin-top: 18px; }
+  .summary p:last-child { margin-bottom: 0; }
+  .advantage { font-style: italic; margin-top: 30px; }
+  .signoff { text-align: right; margin-top: 30px; line-height: 1.35; }
+
+  details { margin-top: 36px; border-top: 1px solid var(--rule); padding-top: 14px; }
+  summary { cursor: pointer; color: var(--muted); }
+  .wortschatz { columns: 2; column-gap: 32px; font-size: 16px; margin-top: 12px; }
+  .wortschatz div { break-inside: avoid; margin-bottom: 2px; }
+  .wortschatz span { color: var(--muted); }
+  @media (max-width: 520px) { .wortschatz { columns: 1; } }
+
+  .hidden { display: none !important; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="running-head"><span>Basic structures of reality</span><span><b>Übungen online</b> · Kapitel 1</span></div>
+
+  <h1><span class="num">1</span>Übungen online</h1>
+  <p class="lede">Exercises A–D are in the book. These three continue the sequence and use only what Chapter 1 has taught you: the pronouns, the forms of <i>sein</i> you have already met, the nouns from Exercise B, and the adjectives from Exercise C. Do Exercise B first; you will need the articles.</p>
+
+  <div class="tabs" role="tablist" aria-label="Exercises">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="ex-e" id="tab-e"><b>E</b><span>Richtig!</span></button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="ex-f" id="tab-f"><b>F</b><span>Am Hof des Grafen</span></button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="ex-g" id="tab-g"><b>G</b><span>Die verlorene Nachricht</span></button>
+  </div>
+
+  <!-- ===================== E ===================== -->
+  <section id="ex-e" role="tabpanel" aria-labelledby="tab-e">
+    <h2>Richtig!</h2>
+    <p class="rubric">Replace the noun with its pronoun and type it in the blank. One point for each correct answer; two points when the gender is not what an English speaker would guess, and two points for a plural. Answers at the start of a sentence are capitalized.</p>
+
+    <div class="item" id="e-item">
+      <p class="prompt" id="e-prompt"></p>
+      <div class="answer-row">
+        <label class="sr-only" for="e-input">Pronoun</label>
+        <input type="text" id="e-input" autocomplete="off" autocapitalize="off" spellcheck="false" lang="de">
+        <button class="act" id="e-check">Prüfen</button>
+        <button class="act quiet hidden" id="e-next">Weiter →</button>
+      </div>
+      <div class="mark" id="e-mark" aria-live="polite"></div>
+    </div>
+    <div class="score-line"><span>Sentence <b id="e-pos">1</b> of <b id="e-total">14</b></span><span>Points <b id="e-score">0</b></span></div>
+    <div class="summary hidden" id="e-summary"></div>
+  </section>
+
+  <!-- ===================== F ===================== -->
+  <section id="ex-f" role="tabpanel" aria-labelledby="tab-f" class="hidden">
+    <h2>Am Hof des Grafen</h2>
+    <p class="rubric">Someone at court is wearing a role card. Read the situation, decide how to address them – <i>du</i>, <i>ihr</i>, or <i>Sie</i> – and then choose the form of <i>sein</i> that goes with it. Follow the rules on pp. 6–7 of the book.</p>
+
+    <div class="item">
+      <div class="card" id="f-card">role card<b id="f-role"></b></div>
+      <p class="situation" id="f-situation"></p>
+      <div class="choices" id="f-pronouns">
+        <span class="lbl">Address them as …</span>
+        <button class="choice" data-p="du">du</button>
+        <button class="choice" data-p="ihr">ihr</button>
+        <button class="choice" data-p="Sie">Sie</button>
+      </div>
+      <div class="mark" id="f-mark" aria-live="polite"></div>
+      <div class="choices hidden" id="f-verbs">
+        <span class="lbl">… and the verb is …</span>
+        <button class="choice" data-v="bist">bist</button>
+        <button class="choice" data-v="seid">seid</button>
+        <button class="choice" data-v="sind">sind</button>
+      </div>
+      <div class="mark hidden" id="f-mark2" aria-live="polite"></div>
+      <button class="act quiet hidden" id="f-next">Weiter →</button>
+    </div>
+    <div class="score-line"><span>Encounter <b id="f-pos">1</b> of <b id="f-total">12</b></span><span>Points <b id="f-score">0</b></span></div>
+    <div class="summary hidden" id="f-summary"></div>
+  </section>
+
+  <!-- ===================== G ===================== -->
+  <section id="ex-g" role="tabpanel" aria-labelledby="tab-g" class="hidden">
+    <h2>Die verlorene Nachricht</h2>
+    <p class="rubric">Write a short scene using nouns from Exercise B and adjectives from Exercise C. The page will rewrite it with pronouns only. Then hand the pronoun version to a partner – or to yourself, in solo mode – and see how much of the original can be recovered.</p>
+
+    <div class="modes">
+      <button class="act" id="g-mode-write">With a partner: write a scene</button>
+      <button class="act quiet" id="g-mode-solo">Solo: decode a random scene</button>
+    </div>
+
+    <div id="g-build">
+      <div id="g-lines"></div>
+      <div class="stack">
+        <button class="act quiet" id="g-add">+ Add a line</button>
+        <button class="act" id="g-pronounize">Rewrite with pronouns</button>
+      </div>
+    </div>
+
+    <div id="g-handoff" class="hidden">
+      <p class="note" id="g-handoff-note"></p>
+      <ol class="scene" id="g-scene"></ol>
+      <div class="stack">
+        <button class="act" id="g-reveal">Auflösen</button>
+        <button class="act quiet" id="g-again">Start over</button>
+      </div>
+      <div class="summary hidden" id="g-summary"></div>
+    </div>
+  </section>
+
+  <p class="advantage" id="advantage">Faith that it works – that's the Graf von Anderson Advantage!</p>
+
+  <details>
+    <summary>Wortschatz for Exercise B – open only after you have looked the words up yourself</summary>
+    <div class="wortschatz" id="wortschatz"></div>
+  </details>
+
+  <p class="signoff">Vorwärts!<br><i>Christian Graf von Anderson, PhD</i></p>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- data ---------- */
+  // g: m / f / n.  tricky: gender is not what an English speaker would guess.
+  const NOUNS = [
+    { en: 'emperor',    sg: 'der Kaiser',       pl: 'die Kaiser',         g: 'm' },
+    { en: 'empress',    sg: 'die Kaiserin',     pl: 'die Kaiserinnen',    g: 'f' },
+    { en: 'king',       sg: 'der König',        pl: 'die Könige',         g: 'm' },
+    { en: 'queen',      sg: 'die Königin',      pl: 'die Königinnen',     g: 'f' },
+    { en: 'prince',     sg: 'der Prinz',        pl: 'die Prinzen',        g: 'm' },
+    { en: 'princess',   sg: 'die Prinzessin',   pl: 'die Prinzessinnen',  g: 'f' },
+    { en: 'duke',       sg: 'der Herzog',       pl: 'die Herzöge',        g: 'm' },
+    { en: 'duchess',    sg: 'die Herzogin',     pl: 'die Herzoginnen',    g: 'f' },
+    { en: 'count',      sg: 'der Graf',         pl: 'die Grafen',         g: 'm' },
+    { en: 'countess',   sg: 'die Gräfin',       pl: 'die Gräfinnen',      g: 'f' },
+    { en: 'baron',      sg: 'der Baron',        pl: 'die Barone',         g: 'm' },
+    { en: 'baroness',   sg: 'die Baronin',      pl: 'die Baroninnen',     g: 'f' },
+    { en: 'knight',     sg: 'der Ritter',       pl: 'die Ritter',         g: 'm' },
+    { en: 'dragon',     sg: 'der Drache',       pl: 'die Drachen',        g: 'm', tricky: true },
+    { en: 'butterfly',  sg: 'der Schmetterling',pl: 'die Schmetterlinge', g: 'm', tricky: true },
+    { en: 'unicorn',    sg: 'das Einhorn',      pl: 'die Einhörner',      g: 'n', tricky: true },
+    { en: 'frog',       sg: 'der Frosch',       pl: 'die Frösche',        g: 'm', tricky: true },
+    { en: 'mushroom',   sg: 'der Pilz',         pl: 'die Pilze',          g: 'm', tricky: true },
+    { en: 'castle',     sg: 'das Schloss',      pl: 'die Schlösser',      g: 'n', tricky: true },
+    { en: 'castle (fortress)', sg: 'die Burg',  pl: 'die Burgen',         g: 'f', tricky: true },
+    { en: 'tower',      sg: 'der Turm',         pl: 'die Türme',          g: 'm', tricky: true },
+    { en: 'forest',     sg: 'der Wald',         pl: 'die Wälder',         g: 'm', tricky: true },
+    { en: 'witch',      sg: 'die Hexe',         pl: 'die Hexen',          g: 'f' },
+    { en: 'wizard',     sg: 'der Zauberer',     pl: 'die Zauberer',       g: 'm' },
+    { en: 'magic',      sg: 'die Zauberei',     pl: 'die Zaubereien',     g: 'f', tricky: true, nopl: true },
+    { en: 'cloud',      sg: 'die Wolke',        pl: 'die Wolken',         g: 'f', tricky: true },
+    { en: 'thunder',    sg: 'der Donner',       pl: 'die Donner',         g: 'm', tricky: true, nopl: true },
+    { en: 'lightning',  sg: 'der Blitz',        pl: 'die Blitze',         g: 'm', tricky: true },
+    { en: 'mountain',   sg: 'der Berg',         pl: 'die Berge',          g: 'm', tricky: true },
+    { en: 'valley',     sg: 'das Tal',          pl: 'die Täler',          g: 'n', tricky: true },
+    { en: 'field',      sg: 'das Feld',         pl: 'die Felder',         g: 'n', tricky: true },
+    { en: 'house',      sg: 'das Haus',         pl: 'die Häuser',         g: 'n', tricky: true },
+    { en: 'room',       sg: 'das Zimmer',       pl: 'die Zimmer',         g: 'n', tricky: true },
+    { en: 'fire',       sg: 'das Feuer',        pl: 'die Feuer',          g: 'n', tricky: true },
+    { en: 'fireplace',  sg: 'der Kamin',        pl: 'die Kamine',         g: 'm', tricky: true },
+    { en: 'bed',        sg: 'das Bett',         pl: 'die Betten',         g: 'n', tricky: true },
+    { en: 'wine',       sg: 'der Wein',         pl: 'die Weine',          g: 'm', tricky: true },
+    { en: 'beer',       sg: 'das Bier',         pl: 'die Biere',          g: 'n', tricky: true },
+    { en: 'pizza',      sg: 'die Pizza',        pl: 'die Pizzas',         g: 'f', tricky: true },
+    { en: 'delivery',   sg: 'die Lieferung',    pl: 'die Lieferungen',    g: 'f', tricky: true },
+  ];
+  const ADJ = ['groß','klein','stark','intelligent','nett','schön','unsterblich','grau','schwarz','braun','weiß','durchsichtig','schmutzig'];
+  const GENDER_NAME = { m: 'masculine', f: 'feminine', n: 'neuter' };
+  const PRON = { m: 'er', f: 'sie', n: 'es' };
+
+  const noun = en => NOUNS.find(n => n.en === en);
+  const pron = (n, plural) => plural ? 'sie' : PRON[n.g];
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const bare = (s) => s.replace(/^(der|die|das)\s/, '');
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const el = id => document.getElementById(id);
+
+  /* ---------- tabs ---------- */
+  const tabs = Array.from(document.querySelectorAll('.tab'));
+  const advantage = {
+    'ex-e': 'Faith that it works – that\u2019s the Graf von Anderson Advantage!',
+    'ex-f': 'Appropriate social distance – that\u2019s the Graf von Anderson Advantage!',
+    'ex-g': 'Total clarity – that\u2019s the Graf von Anderson Advantage!'
+  };
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(o => { o.setAttribute('aria-selected', o === t ? 'true' : 'false'); el(o.getAttribute('aria-controls')).classList.toggle('hidden', o !== t); });
+    el('advantage').textContent = advantage[t.getAttribute('aria-controls')];
+  }));
+
+  /* ---------- E: Richtig! ---------- */
+  const E_POOL = [
+    ['princess', false, 'schön'], ['knight', false, 'stark'], ['unicorn', false, 'weiß'], ['dragon', false, 'grau'],
+    ['witch', false, 'intelligent'], ['castle', false, 'groß'], ['frog', false, 'klein'], ['pizza', false, 'braun'],
+    ['beer', false, 'braun'], ['fire', false, 'schön'], ['cloud', false, 'weiß'], ['knight', true, 'stark'],
+    ['princess', true, 'intelligent'], ['unicorn', true, 'schmutzig'], ['king', true, 'nett'], ['wine', false, 'schwarz'],
+    ['emperor', false, 'groß'], ['empress', false, 'nett'], ['wizard', false, 'unsterblich'], ['thunder', false, 'stark'],
+    ['house', false, 'schmutzig'], ['tower', true, 'weiß'], ['mushroom', false, 'braun'], ['butterfly', false, 'schön'],
+    ['bed', false, 'klein'], ['dragon', true, 'unsterblich'], ['countess', false, 'intelligent'], ['delivery', false, 'klein'],
+    ['field', true, 'grau'], ['forest', false, 'schwarz']
+  ];
+  const E_TOTAL = 14;
+  let e = {};
+
+  function eStart() {
+    e = { items: shuffle(E_POOL).slice(0, E_TOTAL), i: 0, score: 0, answered: false, sieBoth: { she: 0, they: 0 } };
+    el('e-total').textContent = E_TOTAL;
+    el('e-summary').classList.add('hidden');
+    el('e-item').classList.remove('hidden');
+    eShow();
+  }
+  function eShow() {
+    const [en, plural, adj] = e.items[e.i];
+    const n = noun(en);
+    const subj = plural ? n.pl : n.sg;
+    el('e-prompt').innerHTML = `${cap(subj)} ${plural ? 'sind' : 'ist'} ${adj}.<span class="arrow">→</span><span class="blank" aria-hidden="true"></span>${plural ? 'sind' : 'ist'} ${adj}.`;
+    el('e-input').value = '';
+    el('e-input').disabled = false;
+    el('e-mark').innerHTML = '';
+    el('e-check').classList.remove('hidden');
+    el('e-next').classList.add('hidden');
+    el('e-pos').textContent = e.i + 1;
+    el('e-score').textContent = e.score;
+    e.answered = false;
+    el('e-input').focus();
+  }
+  function eCheck() {
+    if (e.answered) return;
+    const raw = el('e-input').value.trim();
+    if (!raw) { el('e-input').focus(); return; }
+    const [en, plural] = e.items[e.i];
+    const n = noun(en);
+    const want = pron(n, plural);
+    const ok = raw.toLowerCase() === want;
+    const worth = (plural || n.tricky) ? 2 : 1;
+    e.answered = true;
+    el('e-input').disabled = true;
+    let why;
+    if (plural) {
+      const same = n.pl === n.sg.replace(/^(der|das)\s/, 'die ');
+      why = `<i>${n.pl}</i> is plural${same ? ` – only the article and the verb give it away, since the singular is <i>${n.sg}</i>` : ''} → <i>sie</i>.`;
+      if (ok) e.sieBoth.they++;
+    } else {
+      why = `<i>${n.sg}</i> is ${GENDER_NAME[n.g]}${n.tricky ? ', whatever you might have guessed' : ''} → <i>${want}</i>.`;
+      if (ok && n.g === 'f') e.sieBoth.she++;
+    }
+    if (ok) {
+      e.score += worth;
+      el('e-mark').innerHTML = `<span class="stamp">Richtig!</span> <span class="note">+${worth} · ${why}</span>`;
+    } else {
+      el('e-mark').innerHTML = `<span class="stamp wrong">Nein.</span> <span class="correction"><s>${raw}</s><span class="caret">^</span>${cap(want)}</span><div class="note">${why}</div>`;
+    }
+    el('e-score').textContent = e.score;
+    el('e-check').classList.add('hidden');
+    el('e-next').classList.remove('hidden');
+    el('e-next').focus();
+  }
+  function eNext() {
+    e.i++;
+    if (e.i < e.items.length) { eShow(); return; }
+    const max = e.items.reduce((s, [en, plural]) => s + ((plural || noun(en).tricky) ? 2 : 1), 0);
+    el('e-item').classList.add('hidden');
+    const s = el('e-summary');
+    s.classList.remove('hidden');
+    s.innerHTML = `<p><b>${e.score} of ${max} points.</b></p>
+      <p>${e.sieBoth.she && e.sieBoth.they ? `You answered <i>sie</i> for a feminine singular ${e.sieBoth.she} time${e.sieBoth.she > 1 ? 's' : ''} and for a plural ${e.sieBoth.they} time${e.sieBoth.they > 1 ? 's' : ''}, and it worked every time. You have now experienced what p. 6 asked you to take on faith.` : 'Notice that <i>sie</i> answers both a feminine singular and any plural. Page 6 asked you to take that on faith; here you can see it work.'}</p>
+      <p><button class="act" id="e-again">Noch einmal</button></p>`;
+    el('e-again').addEventListener('click', eStart);
+  }
+  el('e-check').addEventListener('click', eCheck);
+  el('e-next').addEventListener('click', eNext);
+  el('e-input').addEventListener('keydown', ev => { if (ev.key === 'Enter') { e.answered ? eNext() : eCheck(); } });
+
+  /* ---------- F: Am Hof des Grafen ---------- */
+  // p: du / ihr / Sie ; plural: whether more than one person is addressed
+  const SITUATIONS = [
+    { text: 'Your roommate.', p: 'du', plural: false, why: 'Family, friends, and classmates get <i>du</i>.' },
+    { text: 'Your two best friends, Bob and Fred, both at once.', p: 'ihr', plural: true, why: 'Two friends at once: <i>ihr</i>, the plural of <i>du</i>. Point with both hands.' },
+    { text: 'The postman.', p: 'Sie', plural: false, why: 'Everyone outside family, friends, and fellow students gets <i>Sie</i>, the postman included.' },
+    { text: 'The supermarket cashier.', p: 'Sie', plural: false, why: 'The cashier is on the p. 7 list of people who get <i>Sie</i>.' },
+    { text: 'The Kaiserin, at court.', p: 'Sie', plural: false, why: 'Until and unless other arrangements are made, the Kaiserin is <i>Sie</i>.' },
+    { text: 'Two police officers.', p: 'Sie', plural: true, why: 'Formal and plural, and <i>Sie</i> covers both. Note the verb.' },
+    { text: 'All of your classmates, at once.', p: 'ihr', plural: true, why: 'Fellow students get <i>du</i>; several of them get <i>ihr</i>.' },
+    { text: 'Your professor, on the first day of class.', p: 'Sie', plural: false, why: 'Professors get <i>Sie</i> unless they are trying to be young and hip.' },
+    { text: 'Your professor, who is trying to be young and hip and has asked you to say du.', p: 'du', plural: false, why: 'Other arrangements have been made. Proceed with caution.' },
+    { text: 'Three panhandlers on the Zeil in Frankfurt.', p: 'Sie', plural: true, why: 'Random panhandlers are on the list, and there are three of them.' },
+    { text: 'The neighbors.', p: 'Sie', plural: true, why: 'Neighbors get <i>Sie</i>, however many of them there are.' },
+    { text: 'Your sister.', p: 'du', plural: false, why: 'Family: <i>du</i>.' },
+    { text: 'Your parents, both of them.', p: 'ihr', plural: true, why: 'Family, and two of them: <i>ihr</i>.' },
+    { text: 'A colleague on your own team, in a workplace where the team uses du.', p: 'du', plural: false, why: 'Within the team, <i>du</i>; with other departments, usually <i>Sie</i>.' },
+    { text: 'Two colleagues from another firm.', p: 'Sie', plural: true, why: 'Other firms: almost certainly <i>Sie</i>. Two of them: still <i>Sie</i>.' },
+    { text: 'A dragon.', p: 'Sie', plural: false, role: 'dragon', why: 'The book is silent on dragons. Graf von Anderson advises <i>Sie</i>; it is safer.' },
+    { text: 'A dragon and its brother.', p: 'Sie', plural: true, role: 'dragon', why: 'Two dragons. <i>Sie</i>, and the verb is <i>sind</i> either way.' },
+  ];
+  // Roles: sentence with ein/eine in the singular, bare noun in the plural (p. 7: Sie sind ein Baron / Sie sind Barone).
+  const ROLES = ['knight','baron','witch','wizard','frog','dragon','princess','count','countess','king','unicorn','duke','baroness'];
+  const VERB = { du: 'bist', ihr: 'seid', Sie: 'sind' };
+  const F_TOTAL = 12;
+  let f = {};
+
+  function fStart() {
+    f = { items: shuffle(SITUATIONS).slice(0, F_TOTAL), i: 0, score: 0, step: 0, chosenP: null };
+    el('f-total').textContent = F_TOTAL;
+    el('f-summary').classList.add('hidden');
+    fShow();
+  }
+  function fSentence(p, v, role, plural) {
+    const n = noun(role);
+    const art = n.g === 'f' ? 'eine' : 'ein';
+    const obj = plural ? bare(n.pl) : `${art} ${bare(n.sg)}`;
+    return `${cap(p)} ${v} ${obj}.`;
+  }
+  function fShow() {
+    const s = f.items[f.i];
+    f.role = s.role || pick(ROLES);
+    f.step = 0; f.chosenP = null;
+    const n = noun(f.role);
+    el('f-role').textContent = s.plural ? bare(n.pl) : bare(n.sg);
+    el('f-situation').textContent = s.text;
+    el('f-pronouns').querySelectorAll('button').forEach(b => { b.disabled = false; b.removeAttribute('data-state'); });
+    el('f-verbs').querySelectorAll('button').forEach(b => { b.disabled = false; b.removeAttribute('data-state'); });
+    el('f-verbs').classList.add('hidden');
+    el('f-mark').innerHTML = '';
+    el('f-mark2').innerHTML = ''; el('f-mark2').classList.add('hidden');
+    el('f-next').classList.add('hidden');
+    el('f-pos').textContent = f.i + 1;
+    el('f-score').textContent = f.score;
+  }
+  el('f-pronouns').addEventListener('click', ev => {
+    const b = ev.target.closest('button'); if (!b || f.step !== 0) return;
+    const s = f.items[f.i];
+    const p = b.dataset.p;
+    f.step = 1; f.chosenP = p;
+    el('f-pronouns').querySelectorAll('button').forEach(o => { o.disabled = true; if (o.dataset.p === s.p) o.dataset.state = 'right'; else if (o === b) o.dataset.state = 'wrong'; });
+    if (p === s.p) { f.score += 1; el('f-mark').innerHTML = `<span class="stamp">Richtig!</span> <span class="note">+1 · ${s.why}</span>`; }
+    else el('f-mark').innerHTML = `<span class="stamp wrong">Nein.</span> <span class="correction"><s>${p}</s><span class="caret">^</span>${s.p}</span><div class="note">${s.why}</div>`;
+    el('f-score').textContent = f.score;
+    el('f-verbs').classList.remove('hidden');
+  });
+  el('f-verbs').addEventListener('click', ev => {
+    const b = ev.target.closest('button'); if (!b || f.step !== 1) return;
+    const s = f.items[f.i];
+    const v = b.dataset.v;
+    const want = VERB[s.p];
+    f.step = 2;
+    el('f-verbs').querySelectorAll('button').forEach(o => { o.disabled = true; if (o.dataset.v === want) o.dataset.state = 'right'; else if (o === b) o.dataset.state = 'wrong'; });
+    const sentence = fSentence(s.p, want, f.role, s.plural);
+    let line;
+    if (v === want) { f.score += 1; line = `<span class="stamp">Richtig!</span> <span class="note">+1 · <i>${sentence}</i></span>`; }
+    else line = `<span class="stamp wrong">Nein.</span> <span class="correction"><s>${v}</s><span class="caret">^</span>${want}</span><div class="note"><i>${sentence}</i>${s.p === 'Sie' ? ' – <i>Sie</i> takes <i>sind</i> whether it is one person or several.' : ''}</div>`;
+    el('f-mark2').classList.remove('hidden'); el('f-mark2').innerHTML = line;
+    el('f-score').textContent = f.score;
+    el('f-next').classList.remove('hidden');
+    el('f-next').focus();
+  });
+  el('f-next').addEventListener('click', () => {
+    f.i++;
+    if (f.i < f.items.length) { fShow(); return; }
+    const s = el('f-summary');
+    s.classList.remove('hidden');
+    s.innerHTML = `<p><b>${f.score} of ${F_TOTAL * 2} points.</b></p>
+      <p><i>Du</i> and <i>ihr</i> keep singular and plural apart; <i>Sie</i> ignores the difference and always takes <i>sind</i>. That is the whole trick, and it is also why <i>Sie</i> is always capitalized: so you can tell it from the <i>sie</i> of Exercise E.</p>
+      <p><button class="act" id="f-again">Noch einmal</button></p>`;
+    el('f-again').addEventListener('click', fStart);
+  });
+
+  /* ---------- G: Die verlorene Nachricht ---------- */
+  const G_MAX = 8;
+  let g = { lines: [], mode: 'write' };
+
+  function nounOptions(selected, plural) {
+    return NOUNS.filter(n => !(plural && n.nopl)).map(n => `<option value="${n.en}" ${n.en === selected ? 'selected' : ''}>${plural ? n.pl : n.sg}</option>`).join('');
+  }
+  function gRenderBuilder() {
+    const box = el('g-lines');
+    box.innerHTML = g.lines.map((l, i) => `
+      <div class="line" data-i="${i}">
+        <span class="n">${i + 1}</span>
+        <select class="noun" aria-label="Noun for line ${i + 1}">${nounOptions(l.en)}</select>
+        <select class="num" aria-label="Singular or plural for line ${i + 1}"><option value="sg" ${!l.plural ? 'selected' : ''}>singular</option><option value="pl" ${l.plural ? 'selected' : ''}>plural</option></select>
+        <select class="adj" aria-label="Adjective for line ${i + 1}">${ADJ.map(a => `<option ${a === l.adj ? 'selected' : ''}>${a}</option>`).join('')}</select>
+        <button class="x" aria-label="Remove line ${i + 1}" ${g.lines.length <= 1 ? 'disabled' : ''}>×</button>
+      </div>`).join('');
+    el('g-add').disabled = g.lines.length >= G_MAX;
+  }
+  function gRandomLine() { const n = pick(NOUNS); return { en: n.en, plural: !n.nopl && Math.random() < 0.3, adj: pick(ADJ) }; }
+  function gFull(l) { const n = noun(l.en); return `${cap(l.plural ? n.pl : n.sg)} ${l.plural ? 'sind' : 'ist'} ${l.adj}.`; }
+  function gPron(l) { const n = noun(l.en); return `${cap(pron(n, l.plural))} ${l.plural ? 'sind' : 'ist'} ${l.adj}.`; }
+
+  function gStartWrite() {
+    g = { lines: [gRandomLine(), gRandomLine(), gRandomLine(), gRandomLine(), gRandomLine(), gRandomLine()], mode: 'write' };
+    el('g-build').classList.remove('hidden');
+    el('g-handoff').classList.add('hidden');
+    el('g-summary').classList.add('hidden');
+    el('g-mode-write').classList.remove('quiet'); el('g-mode-solo').classList.add('quiet');
+    gRenderBuilder();
+  }
+  function gStartSolo() {
+    g = { lines: Array.from({ length: 6 }, gRandomLine), mode: 'solo' };
+    el('g-mode-write').classList.add('quiet'); el('g-mode-solo').classList.remove('quiet');
+    gHandoff();
+  }
+  function gHandoff() {
+    el('g-build').classList.add('hidden');
+    el('g-handoff').classList.remove('hidden');
+    el('g-summary').classList.add('hidden');
+    el('g-handoff-note').innerHTML = g.mode === 'write'
+      ? 'Hand the screen to your partner. The nouns are hidden. Partner: for each line, choose the noun you think was there, then press <i>Auflösen</i>.'
+      : 'Here is a scene with the nouns removed. For each line, choose the noun you think was there, then press <i>Auflösen</i>.';
+    el('g-scene').innerHTML = g.lines.map((l, i) => `
+      <li data-i="${i}"><span class="guess"><span>${gPron(l)}</span>
+        <select class="g-guess" aria-label="Your guess for line ${i + 1}"><option value="">– which noun? –</option>${nounOptions('', l.plural)}</select>
+        <span class="verdict"></span></span></li>`).join('');
+    el('g-reveal').disabled = false;
+  }
+  function gReveal() {
+    let gn = 0, exact = 0;
+    el('g-scene').querySelectorAll('li').forEach(li => {
+      const i = +li.dataset.i, l = g.lines[i], n = noun(l.en);
+      const sel = li.querySelector('select'); sel.disabled = true;
+      const guessN = sel.value ? noun(sel.value) : null;
+      const v = li.querySelector('.verdict');
+      li.querySelector('.guess > span:first-child').innerHTML = `<span class="correction"><s>${cap(pron(n, l.plural))}</s></span> ${gFull(l)}`;
+      if (guessN && guessN.en === l.en) { exact++; gn++; v.className = 'verdict exact'; v.textContent = 'exactly right – luck, or telepathy'; }
+      else if (guessN && (l.plural ? true : (guessN.g === n.g))) {
+        // for a plural line any noun's plural fits; for a singular line the gender must match
+        gn++; v.className = 'verdict g'; v.textContent = l.plural ? 'a plural – that is all the pronoun told you' : `${GENDER_NAME[n.g]} – that is all the pronoun told you`;
+      } else { v.className = 'verdict no'; v.textContent = guessN ? `no – the pronoun was ${l.plural ? 'plural' : GENDER_NAME[n.g]}` : 'no guess'; }
+    });
+    el('g-reveal').disabled = true;
+    const s = el('g-summary');
+    s.classList.remove('hidden');
+    const total = g.lines.length;
+    s.innerHTML = `<p><b>${gn} of ${total} lines matched in gender and number; ${exact} exact.</b></p>
+      <p>That is what a pronoun preserves: the gender and the number, and nothing else. It is also precisely what you must learn with every noun, which is why the book insists on it. And notice which pronoun lost the most information: every <i>sie</i> could have been one woman or any crowd at all.</p>`;
+  }
+  el('g-lines').addEventListener('change', ev => {
+    const line = ev.target.closest('.line'); if (!line) return;
+    const i = +line.dataset.i, l = g.lines[i];
+    if (ev.target.classList.contains('noun')) { l.en = ev.target.value; if (noun(l.en).nopl && l.plural) { l.plural = false; gRenderBuilder(); } }
+    if (ev.target.classList.contains('num')) { l.plural = ev.target.value === 'pl' && !noun(l.en).nopl; if (ev.target.value === 'pl' && noun(l.en).nopl) gRenderBuilder(); }
+    if (ev.target.classList.contains('adj')) l.adj = ev.target.value;
+  });
+  el('g-lines').addEventListener('click', ev => {
+    const b = ev.target.closest('button.x'); if (!b) return;
+    const i = +b.closest('.line').dataset.i;
+    g.lines.splice(i, 1); gRenderBuilder();
+  });
+  el('g-add').addEventListener('click', () => { if (g.lines.length < G_MAX) { g.lines.push(gRandomLine()); gRenderBuilder(); } });
+  el('g-pronounize').addEventListener('click', gHandoff);
+  el('g-reveal').addEventListener('click', gReveal);
+  el('g-again').addEventListener('click', () => g.mode === 'write' ? gStartWrite() : gStartSolo());
+  el('g-mode-write').addEventListener('click', gStartWrite);
+  el('g-mode-solo').addEventListener('click', gStartSolo);
+
+  /* ---------- Wortschatz ---------- */
+  el('wortschatz').innerHTML = NOUNS.map(n => `<div>${n.sg}${n.nopl ? '' : ', ' + n.pl} <span>${n.en}</span></div>`).join('');
+
+  /* ---------- go ---------- */
+  eStart(); fStart(); gStartWrite();
+})();
+</script>
+</body>
+</html>
